@@ -11,30 +11,11 @@ from sklearn.svm import SVC, LinearSVC, NuSVC
 from nltk.classify import ClassifierI
 from statistics import mode
 from nltk.tokenize import word_tokenize
+import sys
 
 
 
-class VoteClassifier(ClassifierI):
-    def __init__(self, *classifiers):
-        self._classifiers = classifiers
 
-    def classify(self, features):
-        votes = []
-        for c in self._classifiers:
-            v = c.classify(features)
-            votes.append(v)
-        return mode(votes)
-
-    def confidence(self, features):
-        votes = []
-        for c in self._classifiers:
-            v = c.classify(features)
-            votes.append(v)
-
-        choice_votes = votes.count(mode(votes))
-        conf = choice_votes / len(votes)
-        return conf
-    
 short_pos = open("short_reviews/positive.txt","r").read()
 short_neg = open("short_reviews/negative.txt","r").read()
 
@@ -45,7 +26,9 @@ documents = []
 
 #  j is adject, r is adverb, and v is verb
 #allowed_word_types = ["J","R","V"]
-allowed_word_types = ["J"]
+allowed_word_types = ["J" ]
+
+
 
 for p in short_pos.split('\n'):
     documents.append( (p, "pos") )
@@ -55,7 +38,8 @@ for p in short_pos.split('\n'):
         if w[1][0] in allowed_word_types:
             all_words.append(w[0].lower())
 
-    
+
+
 for p in short_neg.split('\n'):
     documents.append( (p, "neg") )
     words = word_tokenize(p)
@@ -63,6 +47,7 @@ for p in short_neg.split('\n'):
     for w in pos:
         if w[1][0] in allowed_word_types:
             all_words.append(w[0].lower())
+
 
 
 
@@ -103,7 +88,11 @@ classifier = nltk.NaiveBayesClassifier.train(training_set)
 print("Original Naive Bayes Algo accuracy percent:", (nltk.classify.accuracy(classifier, testing_set))*100)
 classifier.show_most_informative_features(15)
 
-###############
+
 save_classifier = open("originalnaivebayes5k.pickle","wb")
 pickle.dump(classifier, save_classifier)
 save_classifier.close()
+
+
+print ( "Completed machine learning." )
+
