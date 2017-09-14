@@ -165,3 +165,22 @@ for root, dirs, filenames in os.walk(indir):
     plt.title ("Training feedback Sentiment Summary")
     plt.show()
     
+
+
+
+
+
+
+
+
+
+
+
+
+                        
+
+
+
+
+
+    
